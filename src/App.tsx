@@ -227,11 +227,10 @@ export default function App() {
             <OptimizedImg 
               src="https://i.ibb.co/YFdDbSg9/9744642f-696b-4009-80d3-1c9fc5d99590.png"
               fallbackSrc="https://i.ibb.co/39FfkbKX/9744642f-696b-4009-80d3-1c9fc5d99590.png"
-              alt="Mockup Dinâmicas de Segurança do Trabalho" 
-              className="w-full h-auto rounded-2xl pointer-events-none select-none shadow-sm"
+              alt="" 
+              className="w-full h-auto rounded-2xl pointer-events-none select-none border-none outline-none shadow-none"
               priority={true}
               width={900}
-              aspectRatio="1448/1086"
             />
           </div>
         </div>
