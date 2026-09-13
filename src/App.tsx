@@ -46,8 +46,16 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
   );
 };
 
+const MOCKUP_SOURCES = [
+  "https://wsrv.nl/?url=https%3A%2F%2Fi.ibb.co%2FYFdDbSg9%2F9744642f-696b-4009-80d3-1c9fc5d99590.png&w=1200&output=webp&q=85",
+  "https://images.weserv.nl/?url=https%3A%2F%2Fi.ibb.co%2FYFdDbSg9%2F9744642f-696b-4009-80d3-1c9fc5d99590.png&w=1200&output=webp&q=85",
+  "https://i.ibb.co/YFdDbSg9/9744642f-696b-4009-80d3-1c9fc5d99590.png",
+  "https://i.ibb.co/39FfkbKX/9744642f-696b-4009-80d3-1c9fc5d99590.png"
+];
+
 export default function App() {
   const [showUpsell, setShowUpsell] = useState(false);
+  const [mockupIndex, setMockupIndex] = useState(0);
 
   const currentDate = new Date().toLocaleDateString('pt-BR', {
     day: '2-digit',
@@ -153,13 +161,13 @@ export default function App() {
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-[0.95] sm:leading-[1] md:leading-[1.05] mb-6 tracking-[-0.05em] sm:tracking-tighter max-w-6xl mx-auto px-0 sm:px-2"
           >
             <span className="block sm:hidden text-[2.2rem] leading-[0.95] tracking-[-0.08em] px-0">
-              <span className="block whitespace-nowrap text-[#047857]">+250 Dinâmicas que</span>
+              <span className="block whitespace-nowrap text-[#10B981]">+250 Dinâmicas que</span>
               <span className="block whitespace-nowrap">Tornam a Segurança</span>
               <span className="block whitespace-nowrap">do Trabalho Mais</span>
-              <span className="block whitespace-nowrap text-[#047857]">Prática e Participativa</span>
+              <span className="block whitespace-nowrap text-[#10B981]">Prática e Participativa</span>
             </span>
             <span className="hidden sm:inline">
-              <span className="text-[#047857]">+250 Dinâmicas</span> que Tornam a Segurança do Trabalho <span className="text-[#047857]">Mais Prática</span> e Participativa
+              <span className="text-[#10B981]">+250 Dinâmicas</span> que Tornam a Segurança do Trabalho <span className="text-[#10B981]">Mais Prática</span> e Participativa
             </span>
           </motion.h1>
           
@@ -172,17 +180,18 @@ export default function App() {
             👇 Quero Acessar Agora 👇
           </motion.button>
 
-          <div className="w-full max-w-xl mx-auto my-6 min-h-[260px] flex items-center justify-center">
+          <div className="w-full max-w-xl mx-auto my-6 flex items-center justify-center">
             <img 
-              src="https://i.ibb.co/YFdDbSg9/9744642f-696b-4009-80d3-1c9fc5d99590.png" 
-              alt="Mockup Dinâmicas SST" 
+              key={mockupIndex}
+              src={MOCKUP_SOURCES[mockupIndex]} 
+              alt="Mockup Dinâmicas de Segurança do Trabalho" 
               className="w-full h-auto rounded-2xl pointer-events-none select-none shadow-sm"
+              referrerPolicy="no-referrer"
               loading="eager"
               decoding="async"
-              onError={(e) => {
-                const target = e.currentTarget;
-                if (target.src.includes('YFdDbSg9')) {
-                  target.src = 'https://i.ibb.co/39FfkbKX/9744642f-696b-4009-80d3-1c9fc5d99590.png';
+              onError={() => {
+                if (mockupIndex < MOCKUP_SOURCES.length - 1) {
+                  setMockupIndex(prev => prev + 1);
                 }
               }}
             />
