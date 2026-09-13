@@ -225,8 +225,7 @@ export default function App() {
 
           <div className="w-full max-w-xl mx-auto my-6 flex items-center justify-center">
             <OptimizedImg 
-              src="https://i.ibb.co/YFdDbSg9/9744642f-696b-4009-80d3-1c9fc5d99590.png"
-              fallbackSrc="https://i.ibb.co/39FfkbKX/9744642f-696b-4009-80d3-1c9fc5d99590.png"
+              src="https://i.ibb.co/7xPB8YDp/65f0292c-2862-492b-91d2-4c1ff263b26b.png"
               alt="" 
               className="w-full h-auto rounded-2xl pointer-events-none select-none border-none outline-none shadow-none"
               priority={true}
