@@ -1,24 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
-    <script
-      src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-      data-utmify-prevent-xcod-sck
-      data-utmify-prevent-subids
-      async
-      defer
-    ></script>
-    <script>
-      window.pixelId = "69db0be126216e4f2d76e01f";
-      var a = document.createElement("script");
-      a.setAttribute("async", "");
-      a.setAttribute("defer", "");
-      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-      document.head.appendChild(a);
-    </script>
     <script>
       // Back Redirect - Acionado quando o usuário clica em Voltar no navegador
-      const link = 'https://backredirectsst.vercel.app'; // Adicionado https:// para garantir o redirecionamento correto para fora do site atual
+      const link = 'https://backredirectsst.vercel.app';
 
       function setBackRedirect(url) {
         let urlBackRedirect = url;
@@ -32,7 +17,6 @@
         history.pushState({}, '', location.href);
 
         window.addEventListener('popstate', () => {
-          console.log('onpopstate', urlBackRedirect);
           setTimeout(() => {
             location.href = urlBackRedirect;
           }, 1);
@@ -42,14 +26,18 @@
       setBackRedirect(link);
     </script>
     <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://wsrv.nl" crossorigin />
+    <link rel="dns-prefetch" href="https://wsrv.nl" />
+    <link rel="preconnect" href="https://images.weserv.nl" crossorigin />
+    <link rel="dns-prefetch" href="https://images.weserv.nl" />
+    <link rel="preconnect" href="https://i.ibb.co" />
+    <link rel="dns-prefetch" href="https://i.ibb.co" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://cdn.utmify.com.br" />
     <link rel="preconnect" href="https://checkout.pagseguropay.shop" />
-    <link rel="preconnect" href="https://i.ibb.co" />
     <link rel="dns-prefetch" href="https://checkout.pagseguropay.shop" />
-    <link rel="dns-prefetch" href="https://i.ibb.co" />
+    <link rel="preload" as="image" href="https://wsrv.nl/?url=https%3A%2F%2Fi.ibb.co%2FYFdDbSg9%2F9744642f-696b-4009-80d3-1c9fc5d99590.png&w=900&output=webp&q=80" type="image/webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dinâmicas SST</title>
   </head>
@@ -58,5 +46,4 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-<!-- force sync v2 -->
 

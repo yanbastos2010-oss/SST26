@@ -4,7 +4,6 @@
  */
 
 import { 
-  Play, 
   Check, 
   ArrowDown, 
   Star, 
@@ -17,14 +16,21 @@ import {
   ChevronDown,
   X,
   HardHat,
-  FileText,
-  Download,
-  Headphones,
   Mail,
   Calendar
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import React, { useState } from 'react';
+
+const handleCheckout = (url: string) => {
+  const search = window.location.search;
+  if (search) {
+    const separator = url.includes('?') ? '&' : '?';
+    window.location.href = url + separator + search.replace(/^\?/, '');
+  } else {
+    window.location.href = url;
+  }
+};
 
 const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,16 +52,53 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
   );
 };
 
-const MOCKUP_SOURCES = [
-  "https://wsrv.nl/?url=https%3A%2F%2Fi.ibb.co%2FYFdDbSg9%2F9744642f-696b-4009-80d3-1c9fc5d99590.png&w=1200&output=webp&q=85",
-  "https://images.weserv.nl/?url=https%3A%2F%2Fi.ibb.co%2FYFdDbSg9%2F9744642f-696b-4009-80d3-1c9fc5d99590.png&w=1200&output=webp&q=85",
-  "https://i.ibb.co/YFdDbSg9/9744642f-696b-4009-80d3-1c9fc5d99590.png",
-  "https://i.ibb.co/39FfkbKX/9744642f-696b-4009-80d3-1c9fc5d99590.png"
-];
+const OptimizedImg = ({
+  src,
+  fallbackSrc,
+  alt,
+  className,
+  aspectRatio,
+  priority = false,
+  width = 800,
+}: {
+  src: string;
+  fallbackSrc?: string;
+  alt: string;
+  className?: string;
+  aspectRatio?: string;
+  priority?: boolean;
+  width?: number;
+}) => {
+  const getCdnUrl = (original: string, host = 'wsrv.nl') =>
+    `https://${host}/?url=${encodeURIComponent(original)}&w=${width}&output=webp&q=80`;
+
+  const [currentSrc, setCurrentSrc] = useState(() => getCdnUrl(src, 'wsrv.nl'));
+
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      className={className}
+      style={aspectRatio ? { aspectRatio } : undefined}
+      referrerPolicy="no-referrer"
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+      fetchPriority={priority ? "high" : "auto"}
+      onError={() => {
+        if (currentSrc.includes('wsrv.nl')) {
+          setCurrentSrc(getCdnUrl(src, 'images.weserv.nl'));
+        } else if (currentSrc.includes('images.weserv.nl')) {
+          setCurrentSrc(src);
+        } else if (fallbackSrc && currentSrc === src) {
+          setCurrentSrc(getCdnUrl(fallbackSrc, 'wsrv.nl'));
+        }
+      }}
+    />
+  );
+};
 
 export default function App() {
   const [showUpsell, setShowUpsell] = useState(false);
-  const [mockupIndex, setMockupIndex] = useState(0);
 
   const currentDate = new Date().toLocaleDateString('pt-BR', {
     day: '2-digit',
@@ -123,14 +166,14 @@ export default function App() {
                 </div>
 
                 <button 
-                  onClick={() => (window as any).redirectWithParams('https://checkout.pagseguropay.shop/VCCL1O8SCXF9')}
+                  onClick={() => handleCheckout('https://checkout.pagseguropay.shop/VCCL1O8SCXF9')}
                   className="w-full bg-[#00C853] hover:bg-[#00E676] text-white font-black py-3 px-4 rounded-xl text-sm sm:text-base uppercase tracking-wide transition-colors cursor-pointer mb-4 text-center leading-tight shadow-md"
                 >
                   SIM, QUERO O PLANO COMPLETO!
                 </button>
 
                 <button 
-                  onClick={() => (window as any).redirectWithParams('https://checkout.pagseguropay.shop/VCCL1O8SCXF8')}
+                  onClick={() => handleCheckout('https://checkout.pagseguropay.shop/VCCL1O8SCXF8')}
                   className="w-full bg-white border-2 border-[#E2E8F0] text-[#94A3B8] font-black py-3 px-4 rounded-xl text-sm sm:text-base transition-colors cursor-pointer text-center leading-tight"
                 >
                   Não, prefiro o plano básico
@@ -181,19 +224,14 @@ export default function App() {
           </motion.button>
 
           <div className="w-full max-w-xl mx-auto my-6 flex items-center justify-center">
-            <img 
-              key={mockupIndex}
-              src={MOCKUP_SOURCES[mockupIndex]} 
+            <OptimizedImg 
+              src="https://i.ibb.co/YFdDbSg9/9744642f-696b-4009-80d3-1c9fc5d99590.png"
+              fallbackSrc="https://i.ibb.co/39FfkbKX/9744642f-696b-4009-80d3-1c9fc5d99590.png"
               alt="Mockup Dinâmicas de Segurança do Trabalho" 
               className="w-full h-auto rounded-2xl pointer-events-none select-none shadow-sm"
-              referrerPolicy="no-referrer"
-              loading="eager"
-              decoding="async"
-              onError={() => {
-                if (mockupIndex < MOCKUP_SOURCES.length - 1) {
-                  setMockupIndex(prev => prev + 1);
-                }
-              }}
+              priority={true}
+              width={900}
+              aspectRatio="1448/1086"
             />
           </div>
         </div>
@@ -302,7 +340,14 @@ export default function App() {
                 className="bg-white rounded-2xl overflow-hidden border-2 border-[#F97316] shadow-md flex flex-col"
               >
                 <div className="w-full bg-[#FDF6E3] flex items-center justify-center border-b border-gray-100">
-                  <img alt={bonus.title} className="w-full aspect-[1536/1024] object-cover" src={bonus.img} referrerPolicy="no-referrer" loading="lazy" decoding="async" />
+                  <OptimizedImg 
+                    src={bonus.img} 
+                    alt={bonus.title} 
+                    className="w-full aspect-[1536/1024] object-cover" 
+                    priority={false}
+                    width={600}
+                    aspectRatio="1536/1024"
+                  />
                 </div>
                 <div className="p-4 sm:p-5 text-center flex flex-col flex-grow justify-center">
                   <h4 className="font-black text-[#0F172A] text-base sm:text-lg mb-1.5 leading-tight">{bonus.title}</h4>
@@ -477,7 +522,7 @@ export default function App() {
                 </div>
 
                 <button 
-                  onClick={() => (window as any).redirectWithParams('https://checkout.pagseguropay.shop/VCCL1O8SCXF6')}
+                  onClick={() => handleCheckout('https://checkout.pagseguropay.shop/VCCL1O8SCXF6')}
                   className="w-[90%] mx-auto bg-[#10B981] hover:bg-[#059669] text-white font-black py-2.5 rounded-lg uppercase tracking-wide transition shadow-lg animate-scale-pulse text-lg block text-center cursor-pointer"
                 >
                   Comprar Agora
